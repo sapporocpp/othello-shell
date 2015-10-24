@@ -39,17 +39,17 @@ namespace Othello{
     class GameInfo{
     private:
         Color my_color_, opponent_color_;
-        std::size_t rows_, cols_;
+        int rows_, cols_;
         
     public:
-        GameInfo(Color my, std::size_t r, std::size_t c) : my_color_(my), rows_(r), cols_(c){
+        GameInfo(Color my, int r, int c) : my_color_(my), rows_(r), cols_(c){
             opponent_color_ = get_opponent_color(my);
         }
         
         inline Color my_color() const{ return my_color_; }
         inline Color opponent_color() const{ return opponent_color_; }
-        inline std::size_t rows() const{ return rows_; }
-        inline std::size_t cols() const{ return cols_; }
+        inline int rows() const{ return rows_; }
+        inline int cols() const{ return cols_; }
     };
     
     constexpr int COORD_NULL = -1;
