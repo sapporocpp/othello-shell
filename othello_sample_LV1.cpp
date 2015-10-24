@@ -1,41 +1,41 @@
 // ------------------------------------------------------------
-// �I�Z��AI�i�T���v���j
-// LV1: �P�Ɂu���[����u����ꏊ��T���A������Βu���v
+// オセロAI（サンプル）
+// LV1: 単に「ルール上置ける場所を探し、見つかれば置く」
 // ------------------------------------------------------------
 
 #include "othello_ai.hpp"
 
-// �N���X���́uOTHELLO_AI�v�ŌŒ肷�邱�ƁB
-// �܂��A���[�U��`�֐��͂��̃N���X�̒��ɒ�`���邱�ƁB
+// クラス名は「OTHELLO_AI」で固定すること。
+// また、ユーザ定義関数はこのクラスの中に定義すること。
 class OTHELLO_AI{
 private:
     Othello::GameInfo gi_;
     
 public:
-    // �R���X�g���N�^�i�K�v�Ȃ�΁j
-    // gi�ɂ͑΋Ǐ��i���Ȃ����ǂ���̎�Ԃ��A�Ֆʂ̃T�C�Y�A���j������
+    // コンストラクタ（必要ならば）
+    // giには対局情報（あなたがどちらの手番か、盤面のサイズ、等）が入る
     OTHELLO_AI(const Othello::GameInfo & gi) : gi_(gi) {}
     
-    // �w��������߂�B
+    // 指す手を決める。
     Othello::Coord place(const Othello::Board & board){
         Othello::Board board_tmp;
         std::size_t flipped;
         
         for(int i = 0; i < board.rows(); ++i){
             for(int j = 0; j < board.cols(); ++j){
-                // �Ֆʂ̃C���X�^���X�𕡐����Ă���
+                // 盤面のインスタンスを複製しておく
                 board_tmp = Othello::Board(board);
-                // �΂�u���Ă݂�
+                // 石を置いてみる
                 flipped = board_tmp.put_and_flip(i, j, gi_.my_color());
                 
                 if(flipped > 0){
-                    // 1�����ł����Ԃ���Ƃ킩�����炻���ɒu��
+                    // 1か所でも裏返せるとわかったらそこに置く
                     return Othello::Coord(i, j);
                 }
             }
         }
         
-        // �ǂ��ɂ��u���Ȃ�
+        // どこにも置けない
         return Othello::Coord();
     }
 };

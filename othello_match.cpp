@@ -1,16 +1,16 @@
 #include "othello_ai.hpp"
 
-// ‘Îí‚³‚¹‚éAI‚Ìƒwƒbƒ_ƒtƒ@ƒCƒ‹‚ğ‚±‚±‚Å“Ç‚İ‚Ş
+// å¯¾æˆ¦ã•ã›ã‚‹AIã®ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã“ã“ã§èª­ã¿è¾¼ã‚€
 #define OTHELLO_AI OthelloAI1
-#include "othello_sample_LV3.cpp"
-#define OTHELLO_AI_1_NAME "othello_sample_LV3.cpp"
+#include "othello_sample_LV1.cpp"
+#define OTHELLO_AI_1_NAME "othello_sample_LV1.cpp"
 #undef OTHELLO_AI
 #define OTHELLO_AI OthelloAI2
-#include "othello_sample_LV2A.cpp"
-#define OTHELLO_AI_2_NAME "othello_sample_LV2A.cpp"
+#include "othello_sample_LV2.cpp"
+#define OTHELLO_AI_2_NAME "othello_sample_LV2.cpp"
 #undef OTHELLO_AI
 
-// ƒƒCƒ“ƒp[ƒg
+// ãƒ¡ã‚¤ãƒ³ãƒ‘ãƒ¼ãƒˆ
 
 #include <iostream>
 #include <cstdlib>
@@ -19,8 +19,8 @@
 constexpr std::size_t BOARD_ROWS = 8;
 constexpr std::size_t BOARD_COLS = 8;
 
-// w‚·è‚ğAIƒvƒƒOƒ‰ƒ€‚©‚çó‚¯æ‚èA–â‘è‚È‚¢‚©”»’è‚µAÎ‚ğ— •Ô‚·B
-// ƒpƒX‚µ‚½ê‡‚ÍfalseA‚»‚êˆÈŠO‚Ìê‡‚Ítrue‚ğ•Ô‚·B
+// æŒ‡ã™æ‰‹ã‚’AIãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‹ã‚‰å—ã‘å–ã‚Šã€å•é¡Œãªã„ã‹åˆ¤å®šã—ã€çŸ³ã‚’è£è¿”ã™ã€‚
+// ãƒ‘ã‚¹ã—ãŸå ´åˆã¯falseã€ãã‚Œä»¥å¤–ã®å ´åˆã¯trueã‚’è¿”ã™ã€‚
 template <class OthelloAIClass>
 bool conduct_placement(OthelloAIClass & ai, const char * ai_name, Othello::Color turn, Othello::Board & board){
     Othello::Coord pl;
@@ -28,8 +28,8 @@ bool conduct_placement(OthelloAIClass & ai, const char * ai_name, Othello::Color
     
     pl = ai.place(board);
     if(pl.is_valid()){
-        // •Ô‚Á‚Ä‚«‚½’l‚ª—LŒø‚ÈˆÊ’u‚ğ¦‚µ‚Ä‚¢‚½ê‡A
-        // uÀÛ‚É’u‚¢‚ÄA­‚È‚­‚Æ‚à1‚ÂÎ‚ª•Ô‚ê‚Îv‚æ‚¢B
+        // è¿”ã£ã¦ããŸå€¤ãŒæœ‰åŠ¹ãªä½ç½®ã‚’ç¤ºã—ã¦ã„ãŸå ´åˆã€
+        // ã€Œå®Ÿéš›ã«ç½®ã„ã¦ã€å°‘ãªãã¨ã‚‚1ã¤çŸ³ãŒè¿”ã‚Œã°ã€ã‚ˆã„ã€‚
         std::size_t flipped = board.put_and_flip(pl, turn);
         if(flipped == 0){
             std::cerr << "[ERROR] Player " << Othello::get_piece_name(turn) << " [" << ai_name << "]: No piece flipped" << std::endl;
@@ -37,7 +37,7 @@ bool conduct_placement(OthelloAIClass & ai, const char * ai_name, Othello::Color
         }
         placed = true;
     }else{
-        // •Ô‚Á‚Ä‚«‚½’l‚ªu‚Ç‚±‚É‚à’u‚¯‚È‚¢v‚Æ‚È‚Á‚Ä‚¢‚½ê‡
+        // è¿”ã£ã¦ããŸå€¤ãŒã€Œã©ã“ã«ã‚‚ç½®ã‘ãªã„ã€ã¨ãªã£ã¦ã„ãŸå ´åˆ
         placed = false;
     }
     std::cout << "Player " << Othello::get_piece_name(turn) << " [" << ai_name << "] put at (" << pl.row() << ", " << pl.col() << "):" << std::endl;
@@ -46,16 +46,15 @@ bool conduct_placement(OthelloAIClass & ai, const char * ai_name, Othello::Color
     return placed;
 }
 
-// ƒƒCƒ“ƒp[ƒg
+// ãƒ¡ã‚¤ãƒ³ãƒ‘ãƒ¼ãƒˆ
 int main(void){
     OthelloAI1 ai1(Othello::GameInfo(Othello::Color::BLACK, BOARD_ROWS, BOARD_COLS));
     OthelloAI2 ai2(Othello::GameInfo(Othello::Color::WHITE, BOARD_ROWS, BOARD_COLS));
     
     Othello::Board board = Othello::Board::init(BOARD_ROWS, BOARD_COLS);
-    std::size_t flipped;
-    std::size_t passed = 0; // ˜A‘±‚µ‚ÄƒpƒX‚³‚ê‚½‰ñ”B2‚É‚È‚é‚Æ‘Î‹ÇI—¹
+    std::size_t passed = 0; // é€£ç¶šã—ã¦ãƒ‘ã‚¹ã•ã‚ŒãŸå›æ•°ã€‚2ã«ãªã‚‹ã¨å¯¾å±€çµ‚äº†
     
-    // ‘Î‹Ç‚ğÀ{
+    // å¯¾å±€ã‚’å®Ÿæ–½
     for(;;){
         if(conduct_placement(ai1, OTHELLO_AI_1_NAME, Othello::Color::BLACK, board)){
             passed = 0;
@@ -72,7 +71,7 @@ int main(void){
         }
     }
     
-    // Œ‹‰Ê‚ğ”‚¦‚é
+    // çµæœã‚’æ•°ãˆã‚‹
     std::map<Othello::Color, std::size_t> result = board.pieces();
     
     std::cout << "[Final Result]" << std::endl;

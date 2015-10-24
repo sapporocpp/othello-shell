@@ -11,13 +11,13 @@
 
 namespace Othello{
     enum class Color : char {
-        BLACK = 1, // •‚ª’u‚©‚ê‚Ä‚¢‚é
-        WHITE = 2, // ”’‚ª’u‚©‚ê‚Ä‚¢‚é
-        EMPTY = 0, // Î‚Í’u‚©‚ê‚Ä‚¢‚È‚¢
-        INVALID = 4 // –³Œø‚ÈÀ•W‚ğw’è‚µ‚½ê‡‚È‚Ç
+        BLACK = 1, // é»’ãŒç½®ã‹ã‚Œã¦ã„ã‚‹
+        WHITE = 2, // ç™½ãŒç½®ã‹ã‚Œã¦ã„ã‚‹
+        EMPTY = 0, // çŸ³ã¯ç½®ã‹ã‚Œã¦ã„ãªã„
+        INVALID = 4 // ç„¡åŠ¹ãªåº§æ¨™ã‚’æŒ‡å®šã—ãŸå ´åˆãªã©
     };
     
-    // ‘Îí‘Šè‚ÌF‚ğ“¾‚é
+    // å¯¾æˆ¦ç›¸æ‰‹ã®è‰²ã‚’å¾—ã‚‹
     Color get_opponent_color(Color c){
         switch(c){
         case Color::BLACK:
@@ -29,13 +29,13 @@ namespace Othello{
         }
     }
     
-    // Î‚Ì”Ô†iBLACK, WHITE‚È‚Çj‚ğÎ‚Ì•¶ši'B', 'W'‚È‚Çj‚É•ÏŠ·
-    // ˆø”‚ª•s³‚Å‚à“Á’i‚Ìƒ`ƒFƒbƒN‚Í‚µ‚Ä‚¢‚È‚¢
+    // çŸ³ã®ç•ªå·ï¼ˆBLACK, WHITEãªã©ï¼‰ã‚’çŸ³ã®æ–‡å­—ï¼ˆ'B', 'W'ãªã©ï¼‰ã«å¤‰æ›
+    // å¼•æ•°ãŒä¸æ­£ã§ã‚‚ç‰¹æ®µã®ãƒã‚§ãƒƒã‚¯ã¯ã—ã¦ã„ãªã„
     char get_piece_name(Color color){
         return ".BW"[static_cast<size_t>(color)];
     }
     
-    // ‘Î‹Ç‚É‚Â‚¢‚Ä‚Ìî•ñi©•ª‚ÌF‚Í‚Ç‚¿‚ç‚©A”Õ–Ê‚Ìs”/—ñ”j
+    // å¯¾å±€ã«ã¤ã„ã¦ã®æƒ…å ±ï¼ˆè‡ªåˆ†ã®è‰²ã¯ã©ã¡ã‚‰ã‹ã€ç›¤é¢ã®è¡Œæ•°/åˆ—æ•°ï¼‰
     class GameInfo{
     private:
         Color my_color_, opponent_color_;
@@ -69,24 +69,33 @@ namespace Othello{
     
     class Board{
     private:
-        std::size_t rows_, cols_;
+        int rows_, cols_;
         std::vector<Color> places_;
         
-    public:
-        // ---------- ƒRƒ“ƒXƒgƒ‰ƒNƒ^ ----------
+        // è£œåŠ©é–¢æ•°ï¼šåº§æ¨™(i, j)ãŒç›¤é¢ã®å†…å´ã‹
+        bool is_within_board(int i, int j) const{
+            return(
+                (i >= 0 && i < rows_) &&
+                (j >= 0 && j < cols_)
+            );
+        }
         
-        // ‹ó‚Ì”Õ–Ê‚ğ¶¬
+    public:
+        // ---------- ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ ----------
+        
+        // ç©ºã®ç›¤é¢ã‚’ç”Ÿæˆ
         Board() : rows_(0), cols_(0) {}
         
-        Board(std::size_t rows, std::size_t cols)
-        : rows_(rows), cols_(cols), places_(rows * cols, Color::EMPTY) {}
+        Board(int rows, int cols)
+        : rows_(rows), cols_(cols),
+          places_(rows * cols, Color::EMPTY) {}
         
-        // •Ê‚Ì”Õ–Ê‚ğƒRƒs[
+        // åˆ¥ã®ç›¤é¢ã‚’ã‚³ãƒ”ãƒ¼
         Board(const Board & other)
         : rows_(other.rows_), cols_(other.cols_), places_(other.places_) {}
         
-        // ‰Šú”Õ–Ê‚ğ¶¬
-        static Board init(std::size_t rows, std::size_t cols){
+        // åˆæœŸç›¤é¢ã‚’ç”Ÿæˆ
+        static Board init(int rows, int cols){
             Board board(rows, cols);
             board.put_only(rows/2 - 1, cols/2 - 1, Color::WHITE);
             board.put_only(rows/2 - 1, cols/2,     Color::BLACK);
@@ -95,14 +104,14 @@ namespace Othello{
             return board;
         }
         
-        // ---------- Šeíˆ— ----------
+        // ---------- å„ç¨®å‡¦ç† ----------
         
-        // ”Õ–Ê‚Ì‘å‚«‚³
-        inline std::size_t rows() const{ return rows_; }
-        inline std::size_t cols() const{ return cols_; }
+        // ç›¤é¢ã®å¤§ãã•
+        inline int rows() const{ return rows_; }
+        inline int cols() const{ return cols_; }
         
-        // Î‚Ì”‚ğæ“¾B
-        // ColorƒNƒ‰ƒX‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğƒL[AÎ‚Ì”‚ğ’l‚Æ‚·‚é˜A‘z”z—ñ‚É‚È‚Á‚Ä‚¢‚é
+        // çŸ³ã®æ•°ã‚’å–å¾—ã€‚
+        // Colorã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ã‚­ãƒ¼ã€çŸ³ã®æ•°ã‚’å€¤ã¨ã™ã‚‹é€£æƒ³é…åˆ—ã«ãªã£ã¦ã„ã‚‹
         std::map<Color, std::size_t> pieces(){
             std::map<Color, std::size_t> result;
             Color c;
@@ -118,73 +127,73 @@ namespace Othello{
             return result;
         }
         
-        // ˆÊ’u‚ğw’è‚µ‚ÄÎ‚ğæ“¾
+        // ä½ç½®ã‚’æŒ‡å®šã—ã¦çŸ³ã‚’å–å¾—
         inline Color get(const Coord & coord) const{
             return get(coord.row(), coord.col());
         }
         
         Color get(int i, int j) const{
-            if(i < 0 || i >= rows_ || j < 0 || j >= cols_) return Color::INVALID;
+            if(!is_within_board(i, j)) return Color::INVALID;
             return places_[i * cols_ + j];
         }
         
-        // ˆÊ’u‚ğw’è‚µ‚Ämy_color‚ÌÎ‚ğİ’u
-        // ¦‚±‚±‚Å‚¢‚¤uİ’uv‚Æ‚ÍA’P‚É‚»‚ÌêŠ‚É‚»‚ÌÎ‚ª‚ ‚éó‘Ô‚É‚·‚é‚¾‚¯‚Å
-        //   ƒQ[ƒ€‚Ìƒ‹[ƒ‹‚Æ‚µ‚Ä’u‚­i— •Ô‚µ‚½‚è‚à‚·‚éj‚í‚¯‚Å‚Í‚È‚¢
+        // ä½ç½®ã‚’æŒ‡å®šã—ã¦my_colorã®çŸ³ã‚’è¨­ç½®
+        // â€»ã“ã“ã§ã„ã†ã€Œè¨­ç½®ã€ã¨ã¯ã€å˜ã«ãã®å ´æ‰€ã«ãã®çŸ³ãŒã‚ã‚‹çŠ¶æ…‹ã«ã™ã‚‹ã ã‘ã§
+        //   ã‚²ãƒ¼ãƒ ã®ãƒ«ãƒ¼ãƒ«ã¨ã—ã¦ç½®ãï¼ˆè£è¿”ã—ãŸã‚Šã‚‚ã™ã‚‹ï¼‰ã‚ã‘ã§ã¯ãªã„
         inline bool put_only(const Coord & coord, Color color){
             return put_only(coord.row(), coord.col(), color);
         }
         
         bool put_only(int i, int j, Color color){
-            if(i < 0 || i >= rows_ || j < 0 || j >= cols_) return false;
+            if(!is_within_board(i, j)) return false;
             places_[i * cols_ + j] = color;
             return true;
         }
         
-        // ˆÊ’u‚ğw’è‚µ‚Ämy_color‚ÌÎ‚ğ’u‚«A— •Ô‚·B
-        // — •Ô‚µ‚½Î‚Ì”‚ğ•Ô‚·B
-        // ‚»‚ÌêŠ‚ÉÎ‚ª’u‚¯‚È‚¢ê‡‚Í0‚ğ•Ô‚·i— •Ô‚µ‚½Î‚Ì”‚ª0‚Ìê‡‚àjB
+        // ä½ç½®ã‚’æŒ‡å®šã—ã¦my_colorã®çŸ³ã‚’ç½®ãã€è£è¿”ã™ã€‚
+        // è£è¿”ã—ãŸçŸ³ã®æ•°ã‚’è¿”ã™ã€‚
+        // ãã®å ´æ‰€ã«çŸ³ãŒç½®ã‘ãªã„å ´åˆã¯0ã‚’è¿”ã™ï¼ˆè£è¿”ã—ãŸçŸ³ã®æ•°ãŒ0ã®å ´åˆã‚‚ï¼‰ã€‚
         inline std::size_t put_and_flip(const Coord & coord, Color my_color){
             return put_and_flip(coord.row(), coord.col(), my_color);
         }
         
         std::size_t put_and_flip(int i, int j, Color my_color){
-            if(i < 0 || i >= rows_ || j < 0 || j >= cols_) return 0;
+            if(!is_within_board(i, j)) return 0;
             
-            // ‚à‚µ‚»‚ÌêŠ‚É‚·‚Å‚ÉÎ‚ª‚ ‚éê‡‚ÍA’u‚¯‚È‚¢
+            // ã‚‚ã—ãã®å ´æ‰€ã«ã™ã§ã«çŸ³ãŒã‚ã‚‹å ´åˆã¯ã€ç½®ã‘ãªã„
             if(get(i, j) != Color::EMPTY) return 0;
             
-            Color opponent_color = get_opponent_color(my_color); // ‘Šè‚ÌF
-            int flipnum = 0; // — •Ô‚µ‚½”
+            Color opponent_color = get_opponent_color(my_color); // ç›¸æ‰‹ã®è‰²
+            int flipnum = 0; // è£è¿”ã—ãŸæ•°
             
-            // 8•ûŒü‚ÉÎ‚ğL‚Î‚µ‚Ä‚¢‚­
+            // 8æ–¹å‘ã«çŸ³ã‚’ä¼¸ã°ã—ã¦ã„ã
             int distance;
             for(int row_direction = -1; row_direction <= 1; ++row_direction){
                 for(int col_direction = -1; col_direction <= 1; ++col_direction){
-                    // 8•ûŒü‚ÉL‚Î‚·‚Ì‚ÅAL‚Î‚¹‚È‚¢ê‡‚ÍœŠO
+                    // 8æ–¹å‘ã«ä¼¸ã°ã™ã®ã§ã€ä¼¸ã°ã›ãªã„å ´åˆã¯é™¤å¤–
                     if(row_direction == 0 && col_direction == 0) continue;
                     
-                    // ‚Ü‚¸A—×‚ª‘Šè‚ÌÎ‚Å‚È‚¯‚ê‚ÎAÎ‚Í— •Ô‚¹‚È‚¢
+                    // ã¾ãšã€éš£ãŒç›¸æ‰‹ã®çŸ³ã§ãªã‘ã‚Œã°ã€çŸ³ã¯è£è¿”ã›ãªã„
                     if(get(i + row_direction, j + col_direction) != opponent_color){
                         continue;
                     }
                     
-                    // ‚»‚µ‚ÄA‚»‚±‚©‚çÎ‚ğL‚Î‚µ‚Ä‚¢‚Á‚ÄA
-                    // u‘Îí‘Šè‚ÌÎ‚ª‘±‚¢‚ÄA‚»‚Ì‚ ‚Æ©•ª‚ÌÎ‚ªŒ»‚ê‚évêŠ‚ğ
-                    // Œ©‚Â‚¯‚é
+                    // ãã—ã¦ã€ãã“ã‹ã‚‰çŸ³ã‚’ä¼¸ã°ã—ã¦ã„ã£ã¦ã€
+                    // ã€Œå¯¾æˆ¦ç›¸æ‰‹ã®çŸ³ãŒç¶šã„ã¦ã€ãã®ã‚ã¨è‡ªåˆ†ã®çŸ³ãŒç¾ã‚Œã‚‹ã€å ´æ‰€ã‚’
+                    // è¦‹ã¤ã‘ã‚‹
                     distance = 2;
                     while(get(i + distance * row_direction, j + distance * col_direction) == opponent_color){
                         ++distance;
                     }
                     
                     if(get(i + distance * row_direction, j + distance * col_direction) == my_color){
-                        // u‘Šè‚ÌÎ‚ª‘±‚­v‚±‚Æ‚ªØ‚ê‚½êŠ‚É‚ ‚éÎ‚ª
-                        // ©•ª‚ÌÎ‚Å‚ ‚ê‚Îi‹ó”’‚à•s‰ÂjA‚»‚±‚ÅÎ‚ğ— •Ô‚¹‚éB
+                        // ã€Œç›¸æ‰‹ã®çŸ³ãŒç¶šãã€ã“ã¨ãŒåˆ‡ã‚ŒãŸå ´æ‰€ã«ã‚ã‚‹çŸ³ãŒ
+                        // è‡ªåˆ†ã®çŸ³ã§ã‚ã‚Œã°ï¼ˆç©ºç™½ã‚‚ä¸å¯ï¼‰ã€ãã“ã§çŸ³ã‚’è£è¿”ã›ã‚‹ã€‚
                         
-                        // — •Ô‚µ‚½Î‚Ì”‚ğ‰ÁZ
+                        // è£è¿”ã—ãŸçŸ³ã®æ•°ã‚’åŠ ç®—
                         flipnum += distance - 1;
                         
-                        // ÀÛ‚É— •Ô‚·
+                        // å®Ÿéš›ã«è£è¿”ã™
                         --distance;
                         for(; distance >= 1; --distance){
                             put_only(i + distance * row_direction, j + distance * col_direction, my_color);
@@ -197,8 +206,8 @@ namespace Othello{
             return flipnum;
         }
         
-        // •\¦‚·‚é
-        // current_r, current_c‚ÍuÎ‚ª‚Ç‚±‚É’u‚©‚ê‚½‚©viÈ—ª‰Â”\j
+        // è¡¨ç¤ºã™ã‚‹
+        // current_r, current_cã¯ã€ŒçŸ³ãŒã©ã“ã«ç½®ã‹ã‚ŒãŸã‹ã€ï¼ˆçœç•¥å¯èƒ½ï¼‰
         inline void display(const Coord & coord) const{
             display(coord.row(), coord.col());
         }
