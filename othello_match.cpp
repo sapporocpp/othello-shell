@@ -11,7 +11,6 @@
 #undef OTHELLO_AI
 
 // メインパート
-
 #include <iostream>
 #include <cstdlib>
 #include <cstddef>
@@ -25,11 +24,12 @@ template <class OthelloAIClass>
 bool conduct_placement(OthelloAIClass & ai, const char * ai_name, Othello::Color turn, Othello::Board & board){
     Othello::Coord pl;
     bool placed = true;
-    
+
     pl = ai.place(board);
     if(pl.is_valid()){
         // 返ってきた値が有効な位置を示していた場合、
         // 「実際に置いて、少なくとも1つ石が返れば」よい。
+
         std::size_t flipped = board.put_and_flip(pl, turn);
         if(flipped == 0){
             std::cerr << "[ERROR] Player " << Othello::get_piece_name(turn) << " [" << ai_name << "]: No piece flipped" << std::endl;
@@ -38,6 +38,7 @@ bool conduct_placement(OthelloAIClass & ai, const char * ai_name, Othello::Color
         placed = true;
     }else{
         // 返ってきた値が「どこにも置けない」となっていた場合
+
         placed = false;
     }
     std::cout << "Player " << Othello::get_piece_name(turn) << " [" << ai_name << "] put at (" << pl.row() << ", " << pl.col() << "):" << std::endl;
@@ -53,7 +54,8 @@ int main(void){
     
     Othello::Board board = Othello::Board::init(BOARD_ROWS, BOARD_COLS);
     std::size_t passed = 0; // 連続してパスされた回数。2になると対局終了
-    
+	char tmp_input[3];
+
     // 対局を実施
     for(;;){
         if(conduct_placement(ai1, OTHELLO_AI_1_NAME, Othello::Color::BLACK, board)){
@@ -77,4 +79,8 @@ int main(void){
     std::cout << "[Final Result]" << std::endl;
     std::cout << "Player B [" << OTHELLO_AI_1_NAME << "]: " << result[Othello::Color::BLACK] << std::endl;
     std::cout << "Player W [" << OTHELLO_AI_2_NAME << "]: " << result[Othello::Color::WHITE] << std::endl;
+
+	std::cin.getline(tmp_input, 3); // コンソールが消える前に入力待ちする。必要ならば
+	
+	return 0;
 }

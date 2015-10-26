@@ -2,7 +2,6 @@
 // オセロAI（サンプル）
 // LV2: 「ルール上置ける場所を探し、最も多く石を裏返せる場所に置く」
 // ------------------------------------------------------------
-
 #include "othello_ai.hpp"
 
 // クラス名は「OTHELLO_AI」で固定すること。
@@ -27,6 +26,7 @@ public:
             for(int j = 0; j < board.cols(); ++j){
                 // 盤面のインスタンスを複製しておく
                 board_tmp = Othello::Board(board);
+
                 // 石を置いてみる
                 flipped = board_tmp.put_and_flip(i, j, gi_.my_color());
                 
