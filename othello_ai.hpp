@@ -1,7 +1,7 @@
 #ifndef OTHELLO_AI_HPP
 #define OTHELLO_AI_HPP
 
-//#define OTHELLO_AI_USE_CPP11
+#define OTHELLO_AI_USE_CPP11
 
 #include <vector>
 #include <map>
