@@ -2,12 +2,12 @@
 
 // 対戦させるAIのヘッダファイルをここで読み込む
 #define OTHELLO_AI OthelloAI1
-#include "othello_sample_LV1.cpp"
-#define OTHELLO_AI_1_NAME "othello_sample_LV1.cpp"
+#include "othello_sample_LV1.hpp"
+#define OTHELLO_AI_1_NAME "othello_sample_LV1.hpp"
 #undef OTHELLO_AI
 #define OTHELLO_AI OthelloAI2
-#include "othello_sample_LV2.cpp"
-#define OTHELLO_AI_2_NAME "othello_sample_LV2.cpp"
+#include "othello_sample_LV2.hpp"
+#define OTHELLO_AI_2_NAME "othello_sample_LV2.hpp"
 #undef OTHELLO_AI
 
 // メインパート
