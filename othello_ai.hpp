@@ -40,14 +40,14 @@ namespace Othello{
 #endif
 
     // 対戦相手の色を得る
-    Color get_opponent_color(Color c){
-        switch(c){
+    Color get_opponent_color(Color color){
+        switch(color){
         case Color::BLACK:
             return Color::WHITE;
         case Color::WHITE:
             return Color::BLACK;
         default:
-            return c;
+            return color;
         }
     }
     

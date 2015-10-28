@@ -1,13 +1,14 @@
 #include "othello_ai.hpp"
 
 // 対戦させるAIのヘッダファイルをここで読み込む
-#define OTHELLO_AI OthelloAI1
-#include "othello_sample_LV1.hpp"
 #define OTHELLO_AI_1_NAME "othello_sample_LV1.hpp"
+#define OTHELLO_AI_2_NAME "othello_sample_LV2.hpp"
+
+#define OTHELLO_AI OthelloAI1
+#include OTHELLO_AI_1_NAME
 #undef OTHELLO_AI
 #define OTHELLO_AI OthelloAI2
-#include "othello_sample_LV2.hpp"
-#define OTHELLO_AI_2_NAME "othello_sample_LV2.hpp"
+#include OTHELLO_AI_2_NAME
 #undef OTHELLO_AI
 
 // メインパート
@@ -22,29 +23,29 @@ constexpr std::size_t BOARD_COLS = 8;
 // パスした場合はfalse、それ以外の場合はtrueを返す。
 template <class OthelloAIClass>
 bool conduct_placement(OthelloAIClass & ai, const char * ai_name, Othello::Color turn, Othello::Board & board){
-    Othello::Coord pl;
-    bool placed = true;
+    Othello::Coord place_from_ai;
+    bool piece_placed = true;
 
-    pl = ai.place(board);
-    if(pl.is_valid()){
+    place_from_ai = ai.place(board);
+    if(place_from_ai.is_valid()){
         // 返ってきた値が有効な位置を示していた場合、
         // 「実際に置いて、少なくとも1つ石が返れば」よい。
 
-        std::size_t flipped = board.put_and_flip(pl, turn);
+        std::size_t flipped = board.put_and_flip(place_from_ai, turn);
         if(flipped == 0){
             std::cerr << "[ERROR] Player " << Othello::get_piece_name(turn) << " [" << ai_name << "]: No piece flipped" << std::endl;
             std::exit(-1);
         }
-        placed = true;
+        piece_placed = true;
     }else{
         // 返ってきた値が「どこにも置けない」となっていた場合
 
-        placed = false;
+        piece_placed = false;
     }
-    std::cout << "Player " << Othello::get_piece_name(turn) << " [" << ai_name << "] put at (" << pl.row() << ", " << pl.col() << "):" << std::endl;
-    board.display(pl);
+    std::cout << "Player " << Othello::get_piece_name(turn) << " [" << ai_name << "] put at (" << place_from_ai.row() << ", " << place_from_ai.col() << "):" << std::endl;
+    board.display(place_from_ai);
     
-    return placed;
+    return piece_placed;
 }
 
 // メインパート
