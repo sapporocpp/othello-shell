@@ -25,12 +25,13 @@ template <class OthelloAIClass>
 bool conduct_placement(OthelloAIClass & ai, const char * ai_name, Othello::Color turn, Othello::Board & board){
     Othello::Coord place_from_ai;
     bool piece_placed = true;
-
-    place_from_ai = ai.place(board);
+    
+    Othello::Board board_tmp(board);
+    
+    place_from_ai = ai.place(board_tmp);
     if(place_from_ai.is_valid()){
         // 返ってきた値が有効な位置を示していた場合、
         // 「実際に置いて、少なくとも1つ石が返れば」よい。
-
         std::size_t flipped = board.put_and_flip(place_from_ai, turn);
         if(flipped == 0){
             std::cerr << "[ERROR] Player " << Othello::get_piece_name(turn) << " [" << ai_name << "]: No piece flipped" << std::endl;
@@ -39,7 +40,6 @@ bool conduct_placement(OthelloAIClass & ai, const char * ai_name, Othello::Color
         piece_placed = true;
     }else{
         // 返ってきた値が「どこにも置けない」となっていた場合
-
         piece_placed = false;
     }
     std::cout << "Player " << Othello::get_piece_name(turn) << " [" << ai_name << "] put at (" << place_from_ai.row() << ", " << place_from_ai.col() << "):" << std::endl;
