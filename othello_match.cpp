@@ -1,8 +1,8 @@
 #include "othello_ai.hpp"
 
 // 対戦させるAIのヘッダファイルをここで読み込む
-#define OTHELLO_AI_1_NAME "othello_sample_LV1.hpp"
-#define OTHELLO_AI_2_NAME "othello_sample_LV2.hpp"
+#define OTHELLO_AI_1_NAME "othello_sample_LV2A.hpp"
+#define OTHELLO_AI_2_NAME "othello_sample_LV3.hpp"
 
 #define OTHELLO_AI OthelloAI1
 #include OTHELLO_AI_1_NAME
@@ -12,12 +12,13 @@
 #undef OTHELLO_AI
 
 // メインパート
+#include <string>
 #include <iostream>
 #include <cstdlib>
 #include <cstddef>
 
-constexpr std::size_t BOARD_ROWS = 8;
-constexpr std::size_t BOARD_COLS = 8;
+constexpr std::size_t BOARD_ROWS_DEFAULT = 8;
+constexpr std::size_t BOARD_COLS_DEFAULT = 8;
 
 // 指す手をAIプログラムから受け取り、問題ないか判定し、石を裏返す。
 // パスした場合はfalse、それ以外の場合はtrueを返す。
@@ -64,14 +65,48 @@ bool conduct_placement(OthelloAIClass & ai, const char * ai_name, Othello::Color
 }
 
 // メインパート
-int main(void){
-    OthelloAI1 ai1(Othello::GameInfo(Othello::Color::BLACK, BOARD_ROWS, BOARD_COLS));
-    OthelloAI2 ai2(Othello::GameInfo(Othello::Color::WHITE, BOARD_ROWS, BOARD_COLS));
+int main(int argc, char ** argv){
+    std::cerr << "----------------------------------------" << std::endl;
+    std::cerr << "Othello Match" << std::endl;
+    std::cerr << "Player Black: " << OTHELLO_AI_1_NAME << std::endl;
+    std::cerr << "Player White: " << OTHELLO_AI_2_NAME << std::endl;
+    std::cerr << "----------------------------------------" << std::endl;
     
-    Othello::Board board = Othello::Board::init(BOARD_ROWS, BOARD_COLS);
+    
+    // コマンドライン引数解析（盤面のサイズ）。
+    // デフォルトではBOARD_ROWS_DEFAULT/BOARD_COLS_DEFAULT
+    std::size_t board_rows = 0, board_cols = 0;
+    
+    if(argc == 1){
+        // 引数なし（デフォルトを利用）
+        board_rows = BOARD_ROWS_DEFAULT;
+        board_cols = BOARD_COLS_DEFAULT;
+    }else if(argc == 3){
+        // 引数2つあり
+        board_rows = std::atoi(argv[1]);
+        board_cols = std::atoi(argv[2]);
+        // C++11で規格化されている関数だが、mingwで利用不可
+        // board_rows = std::stoi(argv[1]);
+        // board_cols = std::stoi(argv[2]);
+    }
+    
+    if(board_rows < 4 || board_cols < 4){
+        // 盤面のサイズが正しく指定されていない場合
+        std::cerr << "Usage:" << std::endl;
+        std::cerr << "<1> PROGRAMNAME" << std::endl;
+        std::cerr << "<2> PROGRAMNAME [BoardRowSize] [BoardColumnSize]" << std::endl;
+        std::cerr << std::endl;
+        std::cerr << "With <1>, match is held with the default board size (" << BOARD_ROWS_DEFAULT << " x " << BOARD_COLS_DEFAULT << ")." << std::endl;
+        return -1;
+    }
+    
+    OthelloAI1 ai1(Othello::GameInfo(Othello::Color::BLACK, board_rows, board_cols));
+    OthelloAI2 ai2(Othello::GameInfo(Othello::Color::WHITE, board_rows, board_cols));
+    
+    Othello::Board board = Othello::Board::init(board_rows, board_cols);
     std::size_t passed = 0; // 連続してパスされた回数。2になると対局終了
     char tmp_input[3];
-
+    
     // 対局を実施
     for(;;){
         if(conduct_placement(ai1, OTHELLO_AI_1_NAME, Othello::Color::BLACK, board)){
