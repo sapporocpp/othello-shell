@@ -25,20 +25,17 @@ public:
     
     // 置ける場所の候補を列挙する
     void enum_possible_placements(Othello::Color color, const Othello::Board & board, SimulatedBoardList & result){
-        SimulatedBoard simboard;
-        std::size_t flipped;
-        
         result.clear();
         
         for(int i = 0; i < board.rows(); ++i){
             for(int j = 0; j < board.cols(); ++j){
                 // 盤面のインスタンスを複製しておく
+                SimulatedBoard simboard;
                 simboard.coord = Othello::Coord(i, j);
                 simboard.board = Othello::Board(board);
-                // 石を置いてみる
-                flipped = simboard.board.put_and_flip(simboard.coord, gi_.my_color());
                 
-                if(flipped > 0){
+                // 石を置いてみる
+                if(simboard.board.put_and_flip(simboard.coord, gi_.my_color()) > 0){
                     // 1か所でも裏返せるとわかったら候補に加える
                     result.push_back(simboard);
                 }
@@ -72,12 +69,9 @@ public:
             // 相手が置ける場所のうち、
             // 自分の石が最も少なくなるときの個数を数える
             // （相手が置ける場所がなければ、上記「相手が置く前の数」が使われる）
-            std::size_t pieces;
             for(SimulatedBoardList::iterator it_o = candidates_opponent.begin(); it_o != candidates_opponent.end(); ++it_o){
-                pieces = (it_o->board.pieces())[gi_.my_color()];
-                if(pieces < min_pieces_o){
-                    min_pieces_o = pieces;
-                }
+                const std::size_t pieces = (it_o->board.pieces())[gi_.my_color()];
+                if(pieces < min_pieces_o) min_pieces_o = pieces;
             }
             
             // 相手の手によって「自分の石が一番少なくなる」ようにされた

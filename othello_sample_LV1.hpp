@@ -17,18 +17,13 @@ public:
     
     // 指す手を決める。
     Othello::Coord place(const Othello::Board & board){
-        Othello::Board board_tmp;
-        std::size_t flipped;
-        
         for(int i = 0; i < board.rows(); ++i){
             for(int j = 0; j < board.cols(); ++j){
                 // 盤面のインスタンスを複製しておく
-                board_tmp = Othello::Board(board);
+                Othello::Board board_tmp = Othello::Board(board);
 
                 // 石を置いてみる
-                flipped = board_tmp.put_and_flip(i, j, gi_.my_color());
-                
-                if(flipped > 0){
+                if(board_tmp.put_and_flip(i, j, gi_.my_color()) > 0){
                     // 1か所でも裏返せるとわかったらそこに置く
                     return Othello::Coord(i, j);
                 }

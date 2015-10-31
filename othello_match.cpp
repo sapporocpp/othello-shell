@@ -1,8 +1,8 @@
 #include "othello_ai.hpp"
 
 // 対戦させるAIのヘッダファイルをここで読み込む
-#define OTHELLO_AI_1_NAME "othello_sample_LV2A.hpp"
-#define OTHELLO_AI_2_NAME "othello_sample_LV3.hpp"
+#define OTHELLO_AI_1_NAME "othello_sample_LV1.hpp"
+#define OTHELLO_AI_2_NAME "othello_sample_LV2.hpp"
 
 #define OTHELLO_AI OthelloAI1
 #include OTHELLO_AI_1_NAME
@@ -24,12 +24,10 @@ constexpr std::size_t BOARD_COLS_DEFAULT = 8;
 // パスした場合はfalse、それ以外の場合はtrueを返す。
 template <class OthelloAIClass>
 bool conduct_placement(OthelloAIClass & ai, const char * ai_name, Othello::Color turn, Othello::Board & board){
-    Othello::Coord place_from_ai;
     bool piece_placed = true;
-    
     Othello::Board board_tmp(board);
     
-    place_from_ai = ai.place(board_tmp);
+    const Othello::Coord place_from_ai = ai.place(board_tmp);
     if(place_from_ai.is_valid()){
         // 返ってきた値が有効な位置を示していた場合
         
@@ -130,8 +128,10 @@ int main(int argc, char ** argv){
     std::cout << "[Final Result]" << std::endl;
     std::cout << "Player B [" << OTHELLO_AI_1_NAME << "]: " << result[Othello::Color::BLACK] << std::endl;
     std::cout << "Player W [" << OTHELLO_AI_2_NAME << "]: " << result[Othello::Color::WHITE] << std::endl;
-
-    std::cin.getline(tmp_input, 3); // コンソールが消える前に入力待ちする。必要ならば
+    
+    // コンソールが消える前に入力待ちする。必要ないならばコメントアウトを
+    std::cerr << std::endl << "<Press Enter key to exit>" << std::endl;
+    std::cin.getline(tmp_input, 3);
     
     return 0;
 }

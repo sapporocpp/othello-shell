@@ -21,9 +21,6 @@ public:
     
     // 指す手を決める。
     Othello::Coord place(const Othello::Board & board){
-        Othello::Board board_tmp;
-        std::size_t flipped;
-        
         // 置ける場所のうち、（各分類において）石を最も多く裏返せるときの
         // 数ならびに場所。
         // [0]: 角のマス（優先度最高）
@@ -38,9 +35,10 @@ public:
         for(int i = 0; i < board.rows(); ++i){
             for(int j = 0; j < board.cols(); ++j){
                 // 盤面のインスタンスを複製しておく
-                board_tmp = Othello::Board(board);
+                Othello::Board board_tmp = Othello::Board(board);
+                
                 // 石を置いてみる
-                flipped = board_tmp.put_and_flip(i, j, gi_.my_color());
+                const std::size_t flipped = board_tmp.put_and_flip(i, j, gi_.my_color());
                 
                 // 今まで試した中で一番多く石を裏返せていたら、
                 // その座標を max_flipped_place に保存しておく
