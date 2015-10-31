@@ -134,7 +134,7 @@ namespace Othello{
         
         // 石の数を取得。
         // Colorクラスのインスタンスをキー、石の数を値とする連想配列になっている
-        std::map<Color, std::size_t> pieces(){
+        std::map<Color, std::size_t> pieces() const {
             std::map<Color, std::size_t> result;
             Color c;
             

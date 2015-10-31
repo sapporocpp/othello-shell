@@ -24,9 +24,9 @@ public:
     typedef std::deque<SimulatedBoard> SimulatedBoardList;
     
     // 置ける場所の候補を列挙する
-    void enum_possible_placements(Othello::Color color, const Othello::Board & board, SimulatedBoardList & result){
-        result.clear();
-        
+    SimulatedBoardList enum_possible_placements(Othello::Color /*color*/, const Othello::Board & board){
+        SimulatedBoardList result;
+
         for(int i = 0; i < board.rows(); ++i){
             for(int j = 0; j < board.cols(); ++j){
                 // 盤面のインスタンスを複製しておく
@@ -41,6 +41,8 @@ public:
                 }
             }
         }
+
+        return result;
     }
     
     // コンストラクタ（必要ならば）
@@ -49,28 +51,26 @@ public:
     
     // 指す手を決める。
     Othello::Coord place(const Othello::Board & board){
-        SimulatedBoardList candidates_me, candidates_opponent;
-        
         // 自分が置ける場所をすべて試し、結果をdequeとして返す
-        enum_possible_placements(gi_.my_color(), board, candidates_me);
+        const auto candidates_me = enum_possible_placements(gi_.my_color(), board);
         
         // そのそれぞれに対して、相手が置ける場所をすべて試す
         std::size_t max_pieces_m = 0;
         Othello::Coord max_pieces_m_place;
         
-        for(SimulatedBoardList::iterator it_m = candidates_me.begin(); it_m != candidates_me.end(); ++it_m){
+        for(auto& me : candidates_me){
             // 相手が置ける場所を列挙する
-            enum_possible_placements(gi_.my_color(), it_m->board, candidates_opponent);
+            const auto candidates_opponent = enum_possible_placements(gi_.my_color(), me.board);
             
             // 相手が置いた結果の、自分の残る石の数。
             // 相手が置く前の数で初期化しておく。
-            std::size_t min_pieces_o = (it_m->board.pieces())[gi_.my_color()];
+            std::size_t min_pieces_o = (me.board.pieces())[gi_.my_color()];
             
             // 相手が置ける場所のうち、
             // 自分の石が最も少なくなるときの個数を数える
             // （相手が置ける場所がなければ、上記「相手が置く前の数」が使われる）
-            for(SimulatedBoardList::iterator it_o = candidates_opponent.begin(); it_o != candidates_opponent.end(); ++it_o){
-                const std::size_t pieces = (it_o->board.pieces())[gi_.my_color()];
+            for(auto& o : candidates_opponent){
+                const std::size_t pieces = (o.board.pieces())[gi_.my_color()];
                 if(pieces < min_pieces_o) min_pieces_o = pieces;
             }
             
@@ -79,7 +79,7 @@ public:
             // その手を選ぶ
             if(min_pieces_o > max_pieces_m){
                 max_pieces_m = min_pieces_o;
-                max_pieces_m_place = it_m->coord;
+                max_pieces_m_place = me.coord;
             }
         }
         
@@ -87,3 +87,4 @@ public:
         return max_pieces_m_place;
     }
 };
+
