@@ -64,11 +64,11 @@ bool conduct_placement(OthelloAIClass & ai, const char * ai_name, Othello::Color
 
 // メインパート
 int main(int argc, char ** argv){
-    std::cerr << "----------------------------------------" << std::endl;
-    std::cerr << "Othello Match" << std::endl;
-    std::cerr << "Player Black: " << OTHELLO_AI_1_NAME << std::endl;
-    std::cerr << "Player White: " << OTHELLO_AI_2_NAME << std::endl;
-    std::cerr << "----------------------------------------" << std::endl;
+    std::cout << "----------------------------------------" << std::endl;
+    std::cout << "Othello Match" << std::endl;
+    std::cout << "Player Black: " << OTHELLO_AI_1_NAME << std::endl;
+    std::cout << "Player White: " << OTHELLO_AI_2_NAME << std::endl;
+    std::cout << "----------------------------------------" << std::endl;
     
     
     // コマンドライン引数解析（盤面のサイズ）。
