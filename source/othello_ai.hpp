@@ -8,6 +8,7 @@
 #include <iostream>
 #include <utility>
 #include <cstddef>
+#include <sstream>
 
 namespace Othello{
 #ifdef OTHELLO_AI_USE_CPP11
@@ -230,29 +231,31 @@ namespace Othello{
         
         // 表示する
         // current_r, current_cは「石がどこに置かれたか」（省略可能）
-        inline void display(const Coord & coord) const{
-            display(coord.row(), coord.col());
+        std::string state(const Coord & coord) const{
+            return state(coord.row(), coord.col());
         }
         
-        void display(int current_r, int current_c) const{
+        std::string state(int current_r, int current_c) const{
+			std::stringstream ss;
             for(int i = 0; i < rows_; ++i){
                 for(int j = 0; j <= cols_; ++j){
                     if(i == current_r && j == current_c){
-                        std::cout << '[';
+                        ss << '[';
                     }else if(i == current_r && j == current_c+1){
-                        std::cout << ']';
+                        ss << ']';
                     }else{
-                        std::cout << ' ';
+                        ss << ' ';
                     }
                     if(j == cols_) break;
-                    std::cout << get_piece_name(get(i, j));
+                    ss << get_piece_name(get(i, j));
                 }
-                std::cout << std::endl;
+				ss << "\n";
             }
+			return ss.str();
         }
         
-        void display(void) const{
-            display(-1, -1);
+        std::string state(void) const{
+            return state(-1, -1);
         }
     };
 }

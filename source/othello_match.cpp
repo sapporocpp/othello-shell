@@ -57,7 +57,7 @@ bool conduct_placement(OthelloAIClass & ai, const char * ai_name, Othello::Color
         piece_placed = false;
     }
     std::cout << "Player " << Othello::get_piece_name(turn) << " [" << ai_name << "] put at (" << place_from_ai.row() << ", " << place_from_ai.col() << "):" << std::endl;
-    board.display(place_from_ai);
+    std::cout << board.state(place_from_ai) << std::endl;
     
     return piece_placed;
 }
