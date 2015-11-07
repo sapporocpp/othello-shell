@@ -6,3 +6,8 @@ env = Environment(CXX="clang++", CXXFLAGS=["-std=c++11", "-Wall", "-Wextra"])
 
 add_build_path = lambda filename: os.path.join("build",filename)
 env.Program(add_build_path("othello_match"), map(add_build_path,["othello_match.cpp"]))
+
+# `scons test`
+BoardTest = env.Program("test", "Test/BoardTest.cpp", CPPPATH=["Catch/include","source"])
+test_alias= Alias("test", [BoardTest], BoardTest[0].abspath)
+AlwaysBuild(test_alias)
