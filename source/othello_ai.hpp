@@ -18,25 +18,12 @@ namespace Othello{
         INVALID = 4 // 無効な座標を指定した場合など
     };
 #else
-    class Color {
-    private:
-        char val_;
-    public:
-        Color() : val_(0) {}
-        Color(char val) : val_(val) {}
-        operator char() const { return static_cast<char>(val_); }
-        bool operator ==(Color other) const { return val_ == other.val_; }
-        bool operator <(Color other) const { return val_ < other.val_; }
-
-        static const char BLACK;
-        static const char WHITE;
-        static const char EMPTY;
-        static const char INVALID;
+    enum Color {
+        BLACK = 1, // 黒が置かれている
+        WHITE = 2, // 白が置かれている
+        EMPTY = 0, // 石は置かれていない
+        INVALID = 4 // 無効な座標を指定した場合など
     };
-    const char Color::BLACK = 1;
-    const char Color::WHITE = 2;
-    const char Color::EMPTY = 0;
-    const char Color::INVALID = 4;
 #endif
 
     // 対戦相手の色を得る
