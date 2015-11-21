@@ -1,3 +1,5 @@
 .sconsign.dblite
 build
 *swp
+*.o
+*.exe
