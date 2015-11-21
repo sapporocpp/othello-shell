@@ -5,8 +5,13 @@ CPPOPT=-Wall -std=c++11
 
 default: othello_match
 
-othello_match: source/othello_match.cpp source/othello_ai.hpp
-	$(CPP) $(CPPOPT) -o $@ $<
+.cpp.o:
+	$(CPP) $(CPPOPT) -c -o $@ $<
+
+source/othello_ai.cpp: source/othello_ai.hpp
+
+othello_match: source/othello_match.o source/othello_ai.o
+	$(CPP) $(CPPOPT) -o $@ $^
 
 clean:
-	rm -f othello_match othello_match.exe
+	rm -vf othello_match othello_match.exe source/*.o
