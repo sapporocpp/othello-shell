@@ -1,8 +1,8 @@
 #include "othello_ai.hpp"
 
 // 対戦させるAIのヘッダファイルをここで読み込む
-#define OTHELLO_AI_1_NAME "othello_sample_LV1.hpp"
-#define OTHELLO_AI_2_NAME "othello_sample_LV2.hpp"
+#define OTHELLO_AI_1_NAME "othello_sample_LV2A.hpp"
+#define OTHELLO_AI_2_NAME "othello_sample_hhiro_manual.hpp"
 
 #define OTHELLO_AI OthelloAI1
 #include OTHELLO_AI_1_NAME
@@ -36,7 +36,7 @@ bool conduct_placement(OthelloAIClass & ai, const char * ai_name, Othello::Color
         
         // もし置いても石を何も裏返せなかった場合は、エラーとする
         if(flipped == 0){
-            std::cerr << "[ERROR] Player " << Othello::get_piece_name(turn) << " [" << ai_name << "]: No piece flipped" << std::endl;
+            std::cerr << "[ERROR] Player " << Othello::get_piece_name(turn) << " [" << ai_name << "]: No piece flipped after putting at (" << place_from_ai.row() << ", " << place_from_ai.col() << ")" << std::endl;
             std::exit(-1);
         }
         piece_placed = true;
